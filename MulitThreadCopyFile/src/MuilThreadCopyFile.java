@@ -6,9 +6,9 @@ import java.io.RandomAccessFile;
  * Created by luca on 2016/9/15.
  */
 public class MuilThreadCopyFile {
+    private static final int buffsize = 1024 * 1024;
     private File src = null, dsc = null;
     private int threadcount;
-    private static final int buffsize = 1024 * 1024;
 
     public MuilThreadCopyFile(String src, String dsc, int threadcount) {
         File file = new File(src);
@@ -20,7 +20,7 @@ public class MuilThreadCopyFile {
     }
 
     public static void main(String[] args) {
-        new MuilThreadCopyFile("E:\\Videos\\天空之城-MP4\\天空之城-MP4.mp4", "E:\\FFOutput\\temp.mp3", 5).execCopy();
+        new MuilThreadCopyFile("E:\\FFOutput\\诛仙青云志11.mp3", "E:\\FFOutput\\temp.mp3", 5).execCopy();
     }
 
     public void execCopy() {
@@ -51,7 +51,7 @@ public class MuilThreadCopyFile {
                 e.printStackTrace();
             }
         }
-
+//System.out.println("修改时间 ");
         dsc.setLastModified(src.lastModified());
     }
 
