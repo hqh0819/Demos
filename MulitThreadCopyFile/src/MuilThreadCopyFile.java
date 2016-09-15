@@ -6,9 +6,9 @@ import java.io.RandomAccessFile;
  * Created by luca on 2016/9/15.
  */
 public class MuilThreadCopyFile {
-    File src = null, dsc = null;
-    int threadcount;
-    int buffsize = 1024 * 1024;
+    private File src = null, dsc = null;
+    private int threadcount;
+    private static final int buffsize = 1024 * 1024;
 
     public MuilThreadCopyFile(String src, String dsc, int threadcount) {
         File file = new File(src);
@@ -30,7 +30,7 @@ public class MuilThreadCopyFile {
         long startposi = 0, endposi = 0;
         //System.out.println(mod);
         for (int i = 1; i <= threadcount; i++) {
-            startposi = endposi ;
+            startposi = endposi;
             endposi = (startposi + size) > src.length() ? src.length() : (startposi + size);
             new CopyThread(startposi, endposi, i + "").start();
             //System.out.println("总文件大小：" + src.length() + "线程" + i + "开始位置：" + startposi + ",结束位置：" + endposi);
@@ -64,10 +64,10 @@ public class MuilThreadCopyFile {
             while (startposi < endposi) {
                 try {
                     //len = read.read(b, 0, buffsize < (endposi - startposi + 1) ? buffsize : (int) (endposi - startposi + 1));
-                    if(startposi+buffsize<endposi){
-                        len=read.read(b);
-                    }else{
-                        len=read.read(b,0, (int) (endposi-startposi));
+                    if (startposi + buffsize < endposi) {
+                        len = read.read(b);
+                    } else {
+                        len = read.read(b, 0, (int) (endposi - startposi));
                     }
                     startposi += len;
                     write.write(b, 0, len);
@@ -77,7 +77,7 @@ public class MuilThreadCopyFile {
 
 
             }
-            System.out.println("线程" + this.getName() + "执行完毕");
+            //System.out.println("线程" + this.getName() + "执行完毕");
         }
     }
 
