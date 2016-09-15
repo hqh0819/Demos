@@ -15,30 +15,48 @@ public class MuilThreadCopyFile {
         if (file.isFile() && file.exists()) this.src = file;
         file = new File(dsc);
         this.dsc = file;
-
         if (threadcount > 0) this.threadcount = threadcount;
 
     }
 
     public static void main(String[] args) {
-        new MuilThreadCopyFile("E:\\Videos\\天空之城-MP4\\天空之城-MP4.mp4", "E:\\FFOutput\\temp.mp3", 5).exceCopy();
+        new MuilThreadCopyFile("E:\\Videos\\天空之城-MP4\\天空之城-MP4.mp4", "E:\\FFOutput\\temp.mp3", 5).execCopy();
     }
 
-    public void exceCopy() {
+    public void execCopy() {
+
+        if (src == null || dsc == null || threadcount == 0) {
+            System.out.println("部分参数设置错误，无法复制！");
+            return;
+        }
+        ;
+
         long size = src.length() / threadcount + 1;
         long mod = src.length() % threadcount;
         long startposi = 0, endposi = 0;
         //System.out.println(mod);
+        Thread[] rs = new Thread[threadcount];
         for (int i = 1; i <= threadcount; i++) {
             startposi = endposi;
             endposi = (startposi + size) > src.length() ? src.length() : (startposi + size);
-            new CopyThread(startposi, endposi, i + "").start();
+            rs[i - 1] = new CopyThread(startposi, endposi, i + "");
+            rs[i - 1].start();
             //System.out.println("总文件大小：" + src.length() + "线程" + i + "开始位置：" + startposi + ",结束位置：" + endposi);
         }
+
+        for (int i = 1; i <= threadcount; i++) {
+            try {
+                rs[i - 1].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        dsc.setLastModified(src.lastModified());
     }
 
     private class CopyThread extends Thread {
-        long startposi, endposi;
+        private long startposi, endposi;
 
         public CopyThread(long startposi, long endposi, String name) {
             super();
