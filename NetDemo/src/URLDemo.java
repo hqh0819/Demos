@@ -16,7 +16,5 @@ public class URLDemo {
         int len;
         while((len=is.read(buff))!=-1)os.write(buff,0,len);
 
-
-
     }
 }
